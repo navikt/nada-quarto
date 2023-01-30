@@ -1,0 +1,16 @@
+kind: "Application"
+apiVersion: "nais.io/v1alpha1"
+metadata:
+  name: nginx
+  namespace: nada
+  labels:
+    team: nada
+spec:
+  replicas:
+    min: 2
+    max: 3
+  image: navikt/nada-quarto-test:v11
+  port: 8080
+  ingresses:
+    - https://data.dev.intern.nav.no/highcharts/test
+    - https://data.dev.intern.nav.no/quartobook 
