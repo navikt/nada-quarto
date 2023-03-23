@@ -16,4 +16,7 @@ WORKDIR /app
 
 COPY main.qmd .
 
+ENV DENO_DIR=/tmp/deno
+ENV XDG_CACHE_HOME=/tmp/cache
+
 CMD ["quarto", "render", "main.qmd", "main.html"]
