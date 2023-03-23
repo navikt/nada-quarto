@@ -1,0 +1,11 @@
+apiVersion: nais.io/v1
+kind: Naisjob
+metadata:
+  annotations:
+    nais.io/read-only-file-system: "false"
+  labels:
+    team: nada
+  name: quarto-eksempel
+  namespace: nada
+spec:
+  image: {{ IMAGE }}
