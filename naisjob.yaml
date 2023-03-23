@@ -8,5 +8,5 @@ metadata:
   name: quarto-eksempel
   namespace: nada
 spec:
-  image: {{ IMAGE }}
+  image: "{{ image }}"
   schedule: "0 1 * * *"
