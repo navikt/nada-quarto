@@ -16,4 +16,4 @@ WORKDIR /app
 
 COPY main.qmd .
 
-CMD ["quarto", "render", "main.qmd", "main.html"]
+CMD ["/usr/local/bin/quarto", "render", "main.qmd", "main.html"]
