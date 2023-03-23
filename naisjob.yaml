@@ -9,3 +9,4 @@ metadata:
   namespace: nada
 spec:
   image: {{ IMAGE }}
+  schedule: "0 1 * * *"
