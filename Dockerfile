@@ -15,8 +15,9 @@ RUN QUARTO_VERSION=$(curl https://api.github.com/repos/quarto-dev/quarto-cli/rel
 WORKDIR /app
 
 COPY main.qmd .
+COPY publish.sh .
 
 ENV DENO_DIR=/tmp/deno
 ENV XDG_CACHE_HOME=/tmp/cache
 
-CMD ["quarto", "render", "main.qmd", "main.html"]
+CMD ["./publish.sh"]

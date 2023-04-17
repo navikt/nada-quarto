@@ -10,3 +10,10 @@ metadata:
 spec:
   image: "{{ image }}"
   schedule: "0 1 * * *"
+  env:
+    - name: ENV
+      value: nada.dev.intern.nav.no
+    - name: QUARTO_ID
+      value: f8d18c9d-6b08-459c-bf25-4ff20f0cac25
+  envFrom:
+    - secret: nada-token
