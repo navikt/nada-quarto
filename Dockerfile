@@ -12,12 +12,9 @@ RUN QUARTO_VERSION=$(curl https://api.github.com/repos/quarto-dev/quarto-cli/rel
     ln -s /quarto-${QUARTO_VERSION}/bin/quarto /usr/local/bin/quarto && \
     rm -rf quarto-${QUARTO_VERSION}-linux-amd64.tar.gz
 
-WORKDIR /app
+WORKDIR /tmp
 
 COPY index.qmd .
 COPY publish.sh .
-
-ENV DENO_DIR=/tmp/deno
-ENV XDG_CACHE_HOME=/tmp/cache
 
 CMD ["./publish.sh"]
