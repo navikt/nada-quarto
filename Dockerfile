@@ -12,7 +12,7 @@ RUN QUARTO_VERSION=$(curl https://api.github.com/repos/quarto-dev/quarto-cli/rel
     ln -s /quarto-${QUARTO_VERSION}/bin/quarto /usr/local/bin/quarto && \
     rm -rf quarto-${QUARTO_VERSION}-linux-amd64.tar.gz
 
-WORKDIR /tmp
+WORKDIR /app
 
 COPY index.qmd .
 COPY publish.sh .
