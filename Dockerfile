@@ -17,4 +17,9 @@ WORKDIR /app
 COPY index.qmd .
 COPY publish.sh .
 
-CMD ["./publish.sh"]
+ENV DENO_DIR=/tmp/deno
+ENV XDG_CACHE_HOME=/tmp/cache
+
+WORKDIR /tmp
+
+CMD ["/app/publish.sh"]
