@@ -1,1 +1,2 @@
 nbformat==5.8.0
+nbclient==0.7.3
