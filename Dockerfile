@@ -12,10 +12,10 @@ RUN QUARTO_VERSION=$(curl https://api.github.com/repos/quarto-dev/quarto-cli/rel
     ln -s /quarto-${QUARTO_VERSION}/bin/quarto /usr/local/bin/quarto && \
     rm -rf quarto-${QUARTO_VERSION}-linux-amd64.tar.gz
 
-WORKDIR /app
-
 RUN groupadd -g 1069 python && \
     useradd -r -u 1069 -g python python
+
+WORKDIR /home/python
 
 COPY index.qmd .
 COPY publish.sh .
@@ -24,12 +24,11 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 RUN ipython kernel install --name "python3"
 
-ENV DENO_DIR=/app/deno
-ENV XDG_CACHE_HOME=/app/cache
-ENV XDG_DATA_HOME=/app/share
+ENV DENO_DIR=/home/python/deno
+ENV XDG_CACHE_HOME=/home/python/cache
+ENV XDG_DATA_HOME=/home/python/share
 
-RUN chown python:python /app -R
+RUN chown python:python /home/python -R
+USER python
 
-USER 1069
-
-CMD ["/app/publish.sh"]
+CMD ["./publish.sh"]

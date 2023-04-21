@@ -5,8 +5,6 @@ format:
         self-contained: true
 ---
 
-# Hello world
-
 > Testing out Quarto
 
 ```{python}

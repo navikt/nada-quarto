@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-quarto render /app/index.qmd
+quarto render index.qmd
 
 curl -X PUT -F file=@index.html \
     "https://${ENV}/quarto/update/${QUARTO_ID}" \
