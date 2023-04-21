@@ -19,6 +19,9 @@ RUN groupadd -g 1069 python && \
 
 COPY index.qmd .
 COPY publish.sh .
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt
 
 ENV DENO_DIR=/app/deno
 ENV XDG_CACHE_HOME=/app/cache
