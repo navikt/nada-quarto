@@ -17,3 +17,7 @@ spec:
       value: f8d18c9d-6b08-459c-bf25-4ff20f0cac25
   envFrom:
     - secret: nada-token
+  accessPolicy:
+    outbound:
+      external:
+        - host: nada.dev.intern.nav.no
