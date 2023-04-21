@@ -22,6 +22,7 @@ COPY publish.sh .
 
 ENV DENO_DIR=/app/deno
 ENV XDG_CACHE_HOME=/app/cache
+ENV XDG_DATA_HOME=/app/share
 
 RUN chown python:python /app -R
 
