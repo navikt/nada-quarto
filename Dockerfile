@@ -14,12 +14,17 @@ RUN QUARTO_VERSION=$(curl https://api.github.com/repos/quarto-dev/quarto-cli/rel
 
 WORKDIR /app
 
+RUN groupadd -g 1069 python && \
+    useradd -r -u 1069 -g python python
+
 COPY index.qmd .
 COPY publish.sh .
 
-ENV DENO_DIR=/tmp/deno
-ENV XDG_CACHE_HOME=/tmp/cache
+ENV DENO_DIR=/app/deno
+ENV XDG_CACHE_HOME=/app/cache
 
-WORKDIR /tmp
+RUN chown python:python /app -R
+
+USER 1069
 
 CMD ["/app/publish.sh"]
