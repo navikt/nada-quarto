@@ -22,6 +22,7 @@ COPY publish.sh .
 COPY requirements.txt .
 
 RUN pip install -r requirements.txt
+RUN ipython kernel install --name "python3"
 
 ENV DENO_DIR=/app/deno
 ENV XDG_CACHE_HOME=/app/cache
