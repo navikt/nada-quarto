@@ -12,7 +12,7 @@ spec:
   schedule: "0 1 * * *"
   env:
     - name: ENV
-      value: nada.dev.intern.nav.no
+      value: datamarkedsplassen.intern.dev.nav.no
     - name: QUARTO_ID
       value: f8d18c9d-6b08-459c-bf25-4ff20f0cac25
   envFrom:
@@ -20,4 +20,4 @@ spec:
   accessPolicy:
     outbound:
       external:
-        - host: nada.dev.intern.nav.no
+        - host: datamarkedsplassen.intern.dev.nav.no
