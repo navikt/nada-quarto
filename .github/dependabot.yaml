@@ -5,12 +5,12 @@
 
 version: 2
 updates:
-  - package-ecosystem: "gomod"
+  - package-ecosystem: "pip"
     directory: "/"
     schedule:
       interval: "weekly"
     groups:
-      gomod:
+      pip:
         patterns:
           - '*'
   - package-ecosystem: "github-actions"
