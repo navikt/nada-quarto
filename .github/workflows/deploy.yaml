@@ -3,37 +3,35 @@ on:
     branches:
       - main
 
-env:
-  IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
-  build:
-    name: Build and push
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v5
-        with:
-          push: true
-          tags: ${{ env.IMAGE }}
-
-  deploy-dev:
-    name: Deploy to dev
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
+  build-and-push:
+    name: Build and push GAR
+    runs-on: ubuntu-20.04
+    outputs:
+      image: ${{ steps.docker-build-push.outputs.image }}
     steps:
       - uses: actions/checkout@v4
-      - uses: nais/deploy/actions/deploy@v2
+      - name: Push docker image to GAR
+        uses: nais/docker-build-push@v0
+        id: docker-build-push
+        with:
+          team: nada
+          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+
+  deploy-dev:
+    name: Deploy dev gcp
+    runs-on: ubuntu-20.04
+    needs: [build-and-push]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to dev-gcp
+        uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: dev-gcp
-          RESOURCE: naisjob.yaml
+          RESOURCE: naisjob.yml
+          VAR: image=${{ needs.build-and-push.outputs.image }}
