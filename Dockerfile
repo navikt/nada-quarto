@@ -20,11 +20,6 @@ RUN QUARTO_VERSION=$(curl https://api.github.com/repos/quarto-dev/quarto-cli/rel
 
 FROM python:3.12-slim AS runner-image
 
-RUN apt-get update && apt-get install -yq --no-install-recommends \
-    curl && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
 RUN groupadd -g 1069 python && \
     useradd -r -u 1069 -g python python
 
@@ -36,7 +31,7 @@ RUN ln -s /quarto/quarto-dist/bin/quarto /usr/local/bin/quarto
 ENV PATH="/opt/venv/bin:$PATH"
 RUN python3 -m venv /opt/venv
 
-COPY publish.sh .
+COPY main.py .
 COPY index.qmd .
 
 RUN chown python:python /quarto -R
@@ -46,4 +41,4 @@ ENV XDG_CACHE_HOME=/quarto/cache
 ENV XDG_DATA_HOME=/quarto/share
 
 USER 1069
-ENTRYPOINT ["./publish.sh"]
+ENTRYPOINT ["python", "main.py"]
