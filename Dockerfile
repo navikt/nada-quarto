@@ -1,4 +1,4 @@
-FROM python:3.12 AS builder-image
+FROM python:3.13 AS builder-image
 
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
@@ -18,7 +18,7 @@ RUN QUARTO_VERSION=$(curl https://api.github.com/repos/quarto-dev/quarto-cli/rel
     rm -rf quarto-${QUARTO_VERSION}-linux-amd64.tar.gz
 
 
-FROM python:3.12-slim AS runner-image
+FROM python:3.13-slim AS runner-image
 
 RUN groupadd -g 1069 python && \
     useradd -r -u 1069 -g python python
