@@ -14,7 +14,7 @@ spec:
     - name: ENV
       value: datamarkedsplassen.intern.dev.nav.no
     - name: QUARTO_ID
-      value: f8d18c9d-6b08-459c-bf25-4ff20f0cac25
+      value: ae431725-91a4-4d63-b85c-dba6b68b3875
   envFrom:
     - secret: nada-token
   accessPolicy:
