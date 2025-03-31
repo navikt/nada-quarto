@@ -2,6 +2,6 @@ nbformat==5.10.4
 nbclient==0.10.2
 ipython==9.0.2
 ipykernel==6.29.5
-pytz == 2025.1
+pytz == 2025.2
 pyyaml==6.0.2
 requests==2.32.3
