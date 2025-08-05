@@ -1,44 +1,52 @@
-FROM python:3.13 AS builder-image
+FROM gcr.io/distroless/cc AS cc
+FROM python:3.13 as builder
 
-RUN python3 -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
-COPY requirements.txt .
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN apt-get update && apt-get install -yq jq curl
 
-RUN apt-get update && apt-get install -yq --no-install-recommends \
-    curl \
-    jq && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-    
+WORKDIR /quarto
+
+RUN useradd -m -d /quarto/ -u 1069 -s /bin/bash quarto && \
+    chown -R quarto:quarto /quarto/
+
 RUN QUARTO_VERSION=$(curl https://api.github.com/repos/quarto-dev/quarto-cli/releases/latest | jq '.tag_name' | sed -e 's/[\"v]//g') && \
     wget https://github.com/quarto-dev/quarto-cli/releases/download/v${QUARTO_VERSION}/quarto-${QUARTO_VERSION}-linux-amd64.tar.gz && \
     tar -xvzf quarto-${QUARTO_VERSION}-linux-amd64.tar.gz && \
     ln -s quarto-${QUARTO_VERSION} quarto-dist && \
     rm -rf quarto-${QUARTO_VERSION}-linux-amd64.tar.gz
 
-
-FROM python:3.13-slim AS runner-image
-
-RUN groupadd -g 1069 python && \
-    useradd -r -u 1069 -g python python
-
-WORKDIR /quarto
-COPY --chown=python:python --from=builder-image /opt/venv /opt/venv
-COPY --chown=python:python --from=builder-image quarto-dist/ quarto-dist/
-RUN ln -s /quarto/quarto-dist/bin/quarto /usr/local/bin/quarto
-
-ENV PATH="/opt/venv/bin:$PATH"
-RUN python3 -m venv /opt/venv
-
 COPY main.py .
 COPY index.qmd .
 
-RUN chown python:python /quarto -R
+FROM python:3.13-alpine3.22
 
-ENV DENO_DIR=/quarto/deno
-ENV XDG_CACHE_HOME=/quarto/cache
-ENV XDG_DATA_HOME=/quarto/share
+COPY --from=cc --chown=root:root --chmod=755 /lib/*-linux-gnu/* /usr/local/lib/
+COPY --from=cc --chown=root:root --chmod=755 /lib/ld-linux-* /lib/
 
-USER 1069
+COPY --from=builder /quarto/quarto-dist/bin /usr/local/bin/
+COPY --from=builder /quarto/quarto-dist/share /usr/local/share/
+COPY --from=builder --chown=quarto:quarto /etc/passwd /etc/passwd
+COPY --from=builder --chown=quarto:quarto /quarto /quarto
+
+RUN mkdir /lib64 && ln -s /usr/local/lib/ld-linux-* /lib64/
+ENV LD_LIBRARY_PATH="/usr/local/lib"
+
+RUN apk update && apk add --no-cache \
+    bash \
+    build-base \
+    libffi-dev \
+    && rm -rf /var/cache/apk/* \
+    && rm -rf /tmp/*
+
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+COPY requirements.txt .
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+ENV PYTHONPATH="/opt/venv/lib/python3.13/site-packages"
+ENV PATH="/opt/venv/bin:${PATH}"
+
+WORKDIR /quarto
+
+USER quarto
+
 ENTRYPOINT ["python", "main.py"]
