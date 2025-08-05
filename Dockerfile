@@ -38,12 +38,11 @@ RUN apk update && apk add --no-cache \
     && rm -rf /tmp/*
 
 RUN python3 -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
+ENV PYTHONPATH="/opt/venv/lib/python3.13/site-packages"
+ENV PATH="/opt/venv/bin:${PATH}"
 COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-ENV PYTHONPATH="/opt/venv/lib/python3.13/site-packages"
-ENV PATH="/opt/venv/bin:${PATH}"
 
 WORKDIR /quarto
 
