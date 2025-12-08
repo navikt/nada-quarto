@@ -1,5 +1,5 @@
 FROM gcr.io/distroless/cc AS cc
-FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/python:3.14.0-dev as dev
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/python:3.14.2-dev as dev
 
 USER root
 RUN apk add --update jq curl shadow
