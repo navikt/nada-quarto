@@ -1,6 +1,6 @@
 nbformat==5.10.4
-nbclient==0.10.3
-ipython==9.8.0
+nbclient==0.10.4
+ipython==9.9.0
 ipykernel==7.1.0
 pytz == 2025.2
 pyyaml==6.0.3
